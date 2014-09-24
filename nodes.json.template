@@ -1,0 +1,14 @@
+[
+    {
+        "user": "bob",
+        "ip": "8.8.8.8",
+        "pass": "changeme",
+        "port": 22
+    },
+    {
+        "user": "bill",
+        "ip": "4.4.4.4",
+        "pass": "changeme",
+        "port": 22
+    }
+]
