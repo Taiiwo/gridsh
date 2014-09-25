@@ -20,6 +20,23 @@ class nodeObj:
 		#send command to get the host to time a single FLOP
 		#possibly times this value by the system load?
 		return timeTaken
+
+	def runCommand(self, command):
+		##if no session was supplied
+		if self.ssh == None:
+			#connect to node.user@node.host:node.port with ssh
+			self.ssh = paramiko.SSHClient()
+			self.ssh.connect(node.host, username=node.user, password=node.pasw)
+		#run command
+		stdin, stdout, stderr = self.ssh.exec_command(command)
+		output = {
+			"stdin"	: stdin,
+			"stdout": stdout,
+			"stderr": stderr,
+			"ssh"	: ssh
+			}
+		return output
+
 def getNodes():
 	try:
 		f = open('./nodes.json', 'r')
@@ -36,7 +53,7 @@ def getNodes():
 	for node in nodesJson:
 		#attempt to connect to node
 		nodeObject = nodeObj(node)
-		output = runCommand('echo "Hello World"', nodeObject)
+		output = nodeObject.runCommand('echo "Hello World"')
 		if output['stdout'] == "Hello World":
 			nodeObject.ssh = output['ssh']
 			nodes.append(nodeObject)
@@ -45,26 +62,10 @@ def getNodes():
 		#remove from the list if it fails
 	return nodes
 
-def runCommand(command, node, ssh = None):
-	##if no session was supplied
-	if ssh == None:
-		#connect to node.user@node.host:node.port with ssh
-		ssh = paramiko.SSHClient()
-		ssh.connect(node.host, username=node.user, password=node.pasw)
-	#run command
-	stdin, stdout, stderr = ssh.exec_command(command)
-	output = {
-		"stdin"	: stdin,
-		"stdout": stdout,
-		"stderr": stderr,
-		"ssh"	: ssh
-		}
-	return output
-
 def parseCommand(rawCommand):
 
 	"""
-	Gridsh has special commands called KeyCommands. Key Commands are used
+	Gridsh has special commands called KeyCommands. KeyCommands are used
 	to specify special tasks that you want Gridsh to perform. The syntax
 	of these commands match '\w+:?.*;'. Anything that matches \1 in 
 	'(\w+)(:|;)' is called a KeyWord. Anything matching \1 in '\w+:?(.*);'
@@ -107,7 +108,7 @@ def commandHandler(nodes):
 	node = nodes[speeds.index(max(values))]
 	#run command on node
 	#get output of command
-	output = runCommand(command, node, node.ssh)
+	output = node.runCommand(command)
 	return output
 	
 #make list of working nodes
