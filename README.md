@@ -26,12 +26,16 @@ to specify the way these commands are to be run.
 - KeyWord             = Anything that matches \1 in '(\w+)(:|;)'
 - KeyCommand argument = Anything matching \1 in '\w+:?(.*);'
 
+```
 example$ if:./*; of:arc.7z; 7z a +of +if
+```
 Note: the values assigned to KeyWords can be used again in the command
-        to save retyping by prepending the KeyWord with a '+'. This is
-        optional.
+to save retyping by prepending the KeyWord with a '+'. This is
+optional.
 
+```
 example$ verbose; example; testValue:10; echo "Hello World";
+```
 Note: KeyCommands can consist of only KeyWords.
 
 
