@@ -26,6 +26,11 @@ to specify the way these commands are to be run.
 - KeyWord             = Anything that matches \1 in '(\w+)(:|;)'
 - KeyCommand argument = Anything matching \1 in '\w+:?(.*);'
 
+KeyCommands
+-----------
+Gridsh has special commands called KeyCommands. KeyCommands are used
+to specify special tasks that you want Gridsh to perform. The syntax
+of these commands match '\w+:?.*;'.
 ```
 example$ if:./*; of:arc.7z; 7z a +of +if
 ```
